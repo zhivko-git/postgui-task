@@ -1,0 +1,23 @@
+FROM ubuntu
+
+RUN apt-get -yq update && apt-get -yqq install ssh git curl ssh
+
+RUN mkdir ~/.ssh && chmod 700 ~/.ssh
+RUN touch ~/.ssh/known_hosts
+RUN ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+RUN curl -s https://deb.nodesource.com/setup_14.x | bash
+
+RUN apt-get update
+RUN apt-get install -y nodejs
+
+RUN git clone https://github.com/priyank-purohit/PostGUI.git
+RUN sed -i "s#http://localhost:3001#http://pgrest:3000#g" /PostGUI/src/data/config.json
+
+WORKDIR /PostGUI
+ENV PORT 8771
+RUN rm -f package-lock.json
+RUN npm install
+RUN npm install -g serve
+CMD ["npm", "run", "build-and-serve"]
+EXPOSE 8771

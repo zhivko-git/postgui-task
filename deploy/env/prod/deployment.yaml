@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgui
+spec:
+  selector:
+    matchLabels:
+      app: postgui
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+      - name: postgres
+        env:
+          - { name: POSTGRES_USER, value: 'postgres' }
+          - { name: POSTGRES_PASSWORD, value: 'postgres' }
+          - { name: POSTGRES_DB, value: 'dvdrental' }
+      - name: postgrest
+        env:
+          - { name: PGRST_DB_URI, value: 'postgres://postgres:postgres@postgres:5432/dvdrental' }
+          - { name: PGRST_OPENAPI_SERVER_PROXY_URI, value: 'http://127.0.0.1:3000' }
+          - { name: PGRST_DB_SCHEMAS, value: 'public' }
+          - { name: PGRST_DB_ANON_ROLE, value: 'postgres' }
+          - { name: PGRST_DB_POOL, value: '10' }
+          - { name: PGRST_SERVER_HOST, value: '*4' }
+          - { name: PGRST_SERVER_PORT, value: '3000' }
