@@ -4,8 +4,8 @@ metadata:
   name: postgui-nginx
 spec:
   ports:
-  - name: http
-    port: 80
+  - port: 80
+    protocol: TCP
     targetPort: 80
   selector:
     app: postgui
@@ -16,7 +16,7 @@ metadata:
   name: postgrest
 spec:
   ports:
-  - name: tcp
+  - name: tcp-postgrest
     port: 3000
     targetPort: 3000
   selector:
@@ -28,8 +28,9 @@ metadata:
   name: postgres
 spec:
   ports:
-  - name: tcp
+  - name: tcp-postgres
     port: 5432
+    protocol: TCP
     targetPort: 5432
   selector:
     app: postgui
@@ -40,7 +41,7 @@ metadata:
   name: postgui
 spec:
   ports:
-  - name: tcp
+  - name: tcp-postgui
     port: 8771
     targetPort: 8771
   selector:

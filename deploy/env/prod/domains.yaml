@@ -1,0 +1,107 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgui-comflare-cf
+  namespace: istio-system
+spec:
+  secretName: postgui-comflare-cf
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: postgui.comflare.cf
+  dnsNames:
+  - postgui.comflare.cf
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: postgui-comflare-cf
+  namespace: postgui
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: postgui-comflare-cf # This should match the Certifcate secretName
+    hosts:
+    - postgui.comflare.cf # This should match a DNS name in the Certificate
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: postgui-comflare-cf
+  namespace: postgui
+spec:
+  hosts:
+  - postgui.comflare.cf
+  gateways:
+  - postgui-comflare-cf
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        # host: service.namespace.svc.cluster.local
+        host: postgui-nginx
+        port:
+          number: 80
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgrest-comflare-cf
+  namespace: istio-system
+spec:
+  secretName: postgrest-comflare-cf
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: postgrest.comflare.cf
+  dnsNames:
+  - postgrest.comflare.cf
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: postgrest-comflare-cf
+  namespace: postgui
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: postgrest-comflare-cf # This should match the Certifcate secretName
+    hosts:
+    - postgrest.comflare.cf # This should match a DNS name in the Certificate
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: postgrest-comflare-cf
+  namespace: postgui
+spec:
+  hosts:
+  - postgrest.comflare.cf
+  gateways:
+  - postgrest-comflare-cf
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        # host: service.namespace.svc.cluster.local
+        host: postgui-nginx
+        port:
+          number: 80

@@ -18,17 +18,43 @@ spec:
         app: postgui
     spec:
       volumes:
-        - name: postgui-nginx-proxy
+        - name: nginx-postgui
           configMap:
-            name: postgui-nginx-proxy
+            name: nginx-postgui
+        - name: nginx-postgrest
+          configMap:
+            name: nginx-postgrest
         - name: postgui-config-json
           configMap:
             name: postgui-config-json
       containers:
+      - name: postgui-nginx
+        image: nginx:1.20
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+        volumeMounts:
+          - name: nginx-postgui
+            mountPath: /etc/nginx/conf.d/nginx-postgui.conf
+            subPath: nginx-postgui.conf
+          - name: nginx-postgrest
+            mountPath: /etc/nginx/conf.d/nginx-postgrest.conf
+            subPath: nginx-postgrest.conf
       - name: postgui-app
         image: agileforce/postgui:latest
         ports:
           - containerPort: 8771
+        # resources:
+        #   requests:
+        #     memory: 256Mi
+        #     cpu: 100m
+        #   limits:
+        #     memory: 512Mi
         volumeMounts:
           - name: postgui-config-json
             mountPath: /PostGUI/src/data/config.json
@@ -42,17 +68,9 @@ spec:
         image: postgrest/postgrest
         ports:
           - containerPort: 3000
-      - name: postgui-nginx
-        image: nginx:1.20
         resources:
           requests:
-            memory: 128Mi
+            memory: 256Mi
             cpu: 100m
           limits:
-            memory: 192Mi
-        ports:
-        - containerPort: 80
-        volumeMounts:
-          - name: postgui-nginx-proxy
-            mountPath: /etc/nginx/conf.d/nginx-proxy.conf
-            subPath: nginx-proxy.conf
+            memory: 512Mi

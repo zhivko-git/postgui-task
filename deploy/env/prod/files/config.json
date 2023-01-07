@@ -2,7 +2,7 @@
     "databases": [
       {
         "title": "DVD Rentals",
-        "url": "http://postgrest:3000",
+        "url": "https://postgrest.comflare.cf",
         "publicDbAcessType": "read",
         "foreignKeySearch": false,
         "primaryKeyFunction": true,
