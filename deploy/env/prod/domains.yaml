@@ -1,21 +1,21 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: postgui-comflare-cf
+  name: postgui-cloudlayer-cf
   namespace: istio-system
 spec:
-  secretName: postgui-comflare-cf
+  secretName: postgui-cloudlayer-cf
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: postgui.comflare.cf
+  commonName: postgui.cloudlayer.cf
   dnsNames:
-  - postgui.comflare.cf
+  - postgui.cloudlayer.cf
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: postgui-comflare-cf
+  name: postgui-cloudlayer-cf
   namespace: postgui
 spec:
   selector:
@@ -27,20 +27,20 @@ spec:
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: postgui-comflare-cf # This should match the Certifcate secretName
+      credentialName: postgui-cloudlayer-cf # This should match the Certifcate secretName
     hosts:
-    - postgui.comflare.cf # This should match a DNS name in the Certificate
+    - postgui.cloudlayer.cf # This should match a DNS name in the Certificate
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: postgui-comflare-cf
+  name: postgui-cloudlayer-cf
   namespace: postgui
 spec:
   hosts:
-  - postgui.comflare.cf
+  - postgui.cloudlayer.cf
   gateways:
-  - postgui-comflare-cf
+  - postgui-cloudlayer-cf
   http:
   - match:
     - uri:
@@ -55,21 +55,21 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: postgrest-comflare-cf
+  name: postgrest-cloudlayer-cf
   namespace: istio-system
 spec:
-  secretName: postgrest-comflare-cf
+  secretName: postgrest-cloudlayer-cf
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: postgrest.comflare.cf
+  commonName: postgrest.cloudlayer.cf
   dnsNames:
-  - postgrest.comflare.cf
+  - postgrest.cloudlayer.cf
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: postgrest-comflare-cf
+  name: postgrest-cloudlayer-cf
   namespace: postgui
 spec:
   selector:
@@ -81,20 +81,20 @@ spec:
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: postgrest-comflare-cf # This should match the Certifcate secretName
+      credentialName: postgrest-cloudlayer-cf # This should match the Certifcate secretName
     hosts:
-    - postgrest.comflare.cf # This should match a DNS name in the Certificate
+    - postgrest.cloudlayer.cf # This should match a DNS name in the Certificate
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: postgrest-comflare-cf
+  name: postgrest-cloudlayer-cf
   namespace: postgui
 spec:
   hosts:
-  - postgrest.comflare.cf
+  - postgrest.cloudlayer.cf
   gateways:
-  - postgrest-comflare-cf
+  - postgrest-cloudlayer-cf
   http:
   - match:
     - uri:
