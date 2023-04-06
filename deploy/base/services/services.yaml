@@ -1,31 +1,43 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgui-nginx
+  name: nginx-svc-postgui
 spec:
   ports:
   - port: 80
     protocol: TCP
     targetPort: 80
   selector:
-    app: postgui
+    app: nginx-postgui
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgrest
+  name: nginx-svc-postgrest
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx-postgrest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgrest-svc
 spec:
   ports:
   - name: tcp-postgrest
     port: 3000
     targetPort: 3000
   selector:
-    app: postgui
+    app: postgui-postgrest
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
+  name: postgres-svc
 spec:
   ports:
   - name: tcp-postgres
@@ -33,16 +45,16 @@ spec:
     protocol: TCP
     targetPort: 5432
   selector:
-    app: postgui
+    app: postgui-postgres
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgui
+  name: postgui-svc
 spec:
   ports:
   - name: tcp-postgui
     port: 8771
     targetPort: 8771
   selector:
-    app: postgui
+    app: postgui-app

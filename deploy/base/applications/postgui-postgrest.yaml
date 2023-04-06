@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgui-postgrest
+spec:
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: postgui-postgrest
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: postgui-postgrest
+    spec:
+      containers:
+      - name: postgrest
+        image: postgrest/postgrest
+        ports:
+          - containerPort: 3000
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+          limits:
+            memory: 512Mi

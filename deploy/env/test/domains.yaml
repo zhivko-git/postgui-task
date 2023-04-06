@@ -48,7 +48,7 @@ spec:
     route:
     - destination:
         # host: service.namespace.svc.cluster.local
-        host: postgui-nginx
+        host: nginx-svc-postgui
         port:
           number: 80
 ---
@@ -102,6 +102,6 @@ spec:
     route:
     - destination:
         # host: service.namespace.svc.cluster.local
-        host: postgui-nginx
+        host: nginx-svc-postgrest
         port:
           number: 80

@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../base
+- configmaps/otel-module-postgrest.yaml
+- configmaps/otel-module-postgui.yaml
+- configmaps/postgui-config-json.yaml
+- configmaps/nginx-postgrest.conf.yaml
+- configmaps/nginx-postgui.conf.yaml
+- configmaps/authentication-sql.yaml
+- proxies/nginx-postgui.yaml
+- proxies/nginx-postgrest.yaml
+- domains.yaml
+
+patchesStrategicMerge:
+- patches/postgui-app.yaml
+- patches/postgui-postgres.yaml
+- patches/postgui-postgrest.yaml

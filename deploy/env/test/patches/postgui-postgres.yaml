@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgui-postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgui-postgres
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      volumes:
+        - name: authentication-sql
+          configMap:
+            name: authentication-sql
+      # initContainers:
+      # - name: init-db
+      #   image: postgres:latest
+      #   command:
+      #     - sh
+      #     - '-c'
+      #     - 'apt update && apt install curl git make -y'
+      #     - 'curl -sLO https://www.postgresqltutorial.com/wp-content/uploads/2019/05/dvdrental.zip'
+      #     - 'pg_restore -U postgres -d dvdrental ./dvdrental.zip'
+      #     - 'git clone https://github.com/michelp/pgjwt'
+      #   volumeMounts:
+      #   - name: mount-name
+      #     mountPath: /mnt/file.txt
+      #     subPath: file.txt
+      containers:
+      - name: postgres
+        image: agileforce/dvdrental:test #postgres:latest
+        env:
+          - { name: POSTGRES_USER, value: 'postgres' }
+          - { name: POSTGRES_PASSWORD, value: 'postgres' }
+          - { name: POSTGRES_DB, value: 'dvdrental' }
+        volumeMounts:
+        - name: authentication-sql
+          mountPath: /Authentication.sql
+          subPath: Authentication.sql

@@ -3,5 +3,7 @@ kind: Kustomization
 namespace: postgui
 
 resources:
-- deployment.yaml
-- service.yaml
+- applications/postgui-app.yaml
+- applications/postgui-postgres.yaml
+- applications/postgui-postgrest.yaml
+- services/services.yaml

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-module-postgui
+  namespace: postgui
+data:
+  opentelemetry_module.conf: |
+    NginxModuleEnabled ON;
+    NginxModuleOtelSpanExporter otlp;
+    NginxModuleOtelExporterEndpoint opentelemetry-collector.observability.svc:4317;
+    NginxModuleServiceName NginxPostGUI;
+    NginxModuleServiceNamespace PostGUI;
+    NginxModuleServiceInstanceId PostGUI;
+    NginxModuleResolveBackends ON;
+    NginxModuleTraceAsError ON;

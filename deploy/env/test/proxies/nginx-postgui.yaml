@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-postgui
+  namespace: postgui
+spec:
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: nginx-postgui
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: nginx-postgui
+    spec:
+      volumes:
+        - name: nginx-postgui
+          configMap:
+            name: nginx-postgui
+        - name: otel-module
+          configMap:
+            name: otel-module-postgui
+      containers:
+      - name: nginx-postgui
+        image: agileforce/nginx-otel:1.23.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: 368Mi
+            cpu: 250m
+          limits:
+            memory: 512Mi
+        volumeMounts:
+          - name: nginx-postgui
+            mountPath: /etc/nginx/conf.d/nginx-postgui.conf
+            subPath: nginx-postgui.conf
+          - name: otel-module
+            mountPath: /etc/nginx/conf.d/opentelemetry_module.conf
+            subPath: opentelemetry_module.conf

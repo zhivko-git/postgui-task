@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgui-app
+spec:
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: postgui-app
+  template:
+    metadata:
+      labels:
+        app: postgui-app
+    spec:
+      volumes:
+        - name: postgui-config-json
+          configMap:
+            name: postgui-config-json
+      containers:
+      - name: postgui
+        image: agileforce/postgui:latest
+        volumeMounts:
+          - name: postgui-config-json
+            mountPath: /PostGUI/src/data/config.json
+            subPath: config.json
+
+

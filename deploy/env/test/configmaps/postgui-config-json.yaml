@@ -1,10 +1,17 @@
-{
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgui-config-json
+  namespace: postgui
+data:
+  config.json: |
+    {
     "databases": [
       {
         "title": "DVD Rentals",
         "url": "https://postgrest.cloudlayer.cf",
         "publicDbAcessType": "read",
-        "foreignKeySearch": false,
+        "foreignKeySearch": true,
         "primaryKeyFunction": true,
         "regexSupport": false
       }
@@ -28,4 +35,4 @@
       "sequence"
     ],
     "errorMsg": "ERROR"
-  }
+    }

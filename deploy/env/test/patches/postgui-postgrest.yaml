@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgui
+  name: postgui-postgrest
 spec:
   selector:
     matchLabels:
-      app: postgui
+      app: postgui-postgrest
   replicas: 1
   template:
     metadata:
@@ -13,14 +13,10 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       containers:
-      - name: postgres
-        env:
-          - { name: POSTGRES_USER, value: 'postgres' }
-          - { name: POSTGRES_PASSWORD, value: 'postgres' }
-          - { name: POSTGRES_DB, value: 'dvdrental' }
       - name: postgrest
+        image: postgrest/postgrest
         env:
-          - { name: PGRST_DB_URI, value: 'postgres://postgres:postgres@postgres:5432/dvdrental' }
+          - { name: PGRST_DB_URI, value: 'postgres://postgres:postgres@postgres-svc:5432/dvdrental' }
           - { name: PGRST_OPENAPI_SERVER_PROXY_URI, value: 'http://127.0.0.1:3000' }
           - { name: PGRST_DB_SCHEMAS, value: 'public' }
           - { name: PGRST_DB_ANON_ROLE, value: 'postgres' }

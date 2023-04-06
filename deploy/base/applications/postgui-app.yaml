@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgui-app
+spec:
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: postgui-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: postgui-app
+    spec:
+      containers:
+      - name: postgui
+        image: agileforce/postgui:latest
+        ports:
+          - containerPort: 8771
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: 250m
+        #   limits:
+        #     memory: 768Mi
+        # volumeMounts:
+        #   - name: postgui-config-json
+        #     mountPath: /PostGUI/src/data/config.json
+        #     subPath: config.json
+
